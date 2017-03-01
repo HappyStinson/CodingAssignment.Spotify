@@ -1,16 +1,13 @@
 ﻿@model global::WebClient.Models.RecommendationBasis
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Get Recommendation";
 }
 
-<h2>Create</h2>
+<h2>Get Recommendation</h2>
 <h3>@ViewBag.Message</h3>
 <h4>@ViewBag.Response</h4>
-@if (ViewBag.ImageUrl != null || ViewBag.ImageUrl != "")
-{
-  <img class="img-responsive small" src="@Url.Content(ViewBag.ImageUrl)"/>
-}
+<img class="img-responsive small" src="@Url.Content(ViewBag.ImageUrl)"/>
 
 
 @using (Html.BeginForm()) 
@@ -31,7 +28,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Get Recommendation" class="btn btn-default" />
             </div>
         </div>
     </div>
