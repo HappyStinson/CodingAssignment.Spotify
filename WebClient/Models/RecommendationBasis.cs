@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace WebClient.Models
+﻿namespace WebClient.Models
 {
     public class RecommendationBasis
     {
+        public int Id { get; set; }
         public string Artist { get; set; }
     }
 }
