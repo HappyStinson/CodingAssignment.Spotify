@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
 using CodingAssignment.Spotify.ApiClient;
+using CodingAssignment.Spotify.ApiClient.Models;
 using WebClient.DAL;
 using WebClient.Models;
 
@@ -36,10 +37,7 @@ namespace WebClient.Controllers
         // GET: Basis/Create
         public ActionResult Create()
         {
-            //ViewBag.Response = "";
-            //ViewBag.Message = "";
-            //ViewBag.ImageUrl = "";
-
+            ViewBag.ImageUrl = "/images/note.png";
 
             return View();
         }
@@ -56,14 +54,21 @@ namespace WebClient.Controllers
                 var client = new SpotifyApiClient();
 
                 var response = await client.SearchArtistsAsync(recommendationBasis.Artist);
-                ViewBag.Response = response;
                 var artists = response.Artists;
-                var artist = artists.Items[0];
 
-                ViewBag.Message = $"{artist.Name}, popularity: {artist.Popularity}";
+                if (artists.Total > 0)
+                {
+                    var artist = artists.Items[0];
+                    ViewBag.Message = $"{artist.Name}, popularity: {artist.Popularity}";
 
-                if (artist.Images.Count != 0)
-                    ViewBag.ImageUrl = artist.Images[0].Url;
+                    if (artist.Images.Count > 0)
+                        ViewBag.ImageUrl = artist.Images[0].Url;
+                }
+                else
+                {
+                    ViewBag.Message = "No artists match your search";
+                    ViewBag.ImageUrl = "/images/note.png";
+                }
 
                 // fulhack med ViewBag
                 return View();

@@ -7,8 +7,10 @@
 <h2>Create</h2>
 <h3>@ViewBag.Message</h3>
 <h4>@ViewBag.Response</h4>
-
-<img src="@Url.Content(ViewBag.ImageUrl)" />
+@if (ViewBag.ImageUrl != null || ViewBag.ImageUrl != "")
+{
+  <img class="img-responsive small" src="@Url.Content(ViewBag.ImageUrl)"/>
+}
 
 
 @using (Html.BeginForm()) 
