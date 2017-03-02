@@ -1,26 +1,35 @@
-﻿@model WebClient.Models.RecommendationBasis
+﻿@model IEnumerable<CodingAssignment.Spotify.ApiClient.Models.Track>
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Recommended Tracks";
 }
 
-<h2>Details</h2>
+<h2>Recommended Tracks</h2>
 
-<div>
-    <h4>RecommendationBasis</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Artist)
-        </dt>
+<table class="table">
+  <tr>
+    <th>
+      @Html.DisplayNameFor(model => model.Name)
+    </th>
+    <th>
+      @Html.DisplayNameFor(model => model.Explicit)
+    </th>
+  </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Artist)
-        </dd>
+  @foreach (var item in Model)
+  {
+      <tr>
+        <td>
+          @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Explicit)
+        </td>
+      </tr>
+  }
 
-    </dl>
-</div>
+</table>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
