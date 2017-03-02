@@ -47,5 +47,22 @@ namespace CodingAssignment.Spotify.ApiClient
             var artistResponse = JsonConvert.DeserializeObject<SearchArtistResponse>(response);
             return artistResponse;
         }
+
+        public async Task<GetRecommendationsResponse> GetRecommendationsAsync(string artistId, int? limit = null)
+        {
+            var client = GetDefaultClient();
+
+            var url = new Url("/v1/recommendations");
+            url = url.SetQueryParam("seed_artists", artistId);
+            url = url.SetQueryParam("seed_genres", "classical,country");
+
+            if (limit != null)
+                url = url.SetQueryParam("limit", limit);
+
+            var response = await client.GetStringAsync(url);
+
+            var recommendationsResponse = JsonConvert.DeserializeObject<GetRecommendationsResponse>(response);
+            return recommendationsResponse;
+        }
     }
 }
