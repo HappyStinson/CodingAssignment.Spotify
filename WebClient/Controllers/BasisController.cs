@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using CodingAssignment.Spotify.ApiClient;
 using WebClient.DAL;
 using WebClient.Models;
+using CodingAssignment.Spotify.ApiClient.Models;
 
 namespace WebClient.Controllers
 {
@@ -13,9 +14,7 @@ namespace WebClient.Controllers
         // GET: Basis
         public ActionResult Index()
         {
-            ViewBag.ImageUrl = "/images/note.png";
-
-            return View("Create");
+            return RedirectToAction("Create");
         }
 
         // GET: Basis/Create
@@ -31,30 +30,39 @@ namespace WebClient.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Artist")] RecommendationBasis recommendationBasis)
+        public async Task<ActionResult> Create([Bind(Include = "Id, Artist, Tempo, Energy, Danceability, Mode")] RecommendationBasis basis)
         {
             if (ModelState.IsValid)
             {
                 var client = new SpotifyApiClient();
 
-                var response = await client.SearchArtistsAsync(recommendationBasis.Artist);
+                var response = await client.SearchArtistsAsync(basis.Artist);
                 var artists = response.Artists;
 
+                GetRecommendationsResponse recommendations = null;
                 if (artists.Total > 0)
                 {
                     var artist = artists.Items[0];
-                    var recommendations = await client.GetRecommendationsAsync(artist.Id);
+                    var energy = basis.Energy * 0.01f;
+                    var danceability = 0.0f;
+                    var mode = 0;
 
-                    return View("Details", recommendations.Tracks);
+                    if (basis.Danceability)
+                        danceability = 1.0f;
+                    if (basis.Mode)
+                        mode = 1;
+
+                    recommendations = await client.GetRecommendationsAsync(artist.Id, basis.Tempo, energy, danceability, mode);
+                }
+                else
+                {
+                    recommendations = await client.GetRecommendationsAsync("0OdUWJ0sBjDrqHygGUXeCF");
                 }
 
-                ViewBag.Message = "No artists match your search";
-                ViewBag.ImageUrl = "/images/note.png";
-
-                return View();
+                return View("Details", recommendations.Tracks);
             }
 
-            return View(recommendationBasis);
+            return View(basis);
         }
 
         protected override void Dispose(bool disposing)

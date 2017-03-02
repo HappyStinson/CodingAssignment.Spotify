@@ -48,14 +48,26 @@ namespace CodingAssignment.Spotify.ApiClient
             return artistResponse;
         }
 
-        public async Task<GetRecommendationsResponse> GetRecommendationsAsync(string artistId, int? limit = null)
+        public async Task<GetRecommendationsResponse> GetRecommendationsAsync(string artistId,
+                                                                                float? tempo = null,
+                                                                                float? energy = null,
+                                                                                float? danceability = null,
+                                                                                int? mode = null,
+                                                                                int? limit = null)
         {
             var client = GetDefaultClient();
 
             var url = new Url("/v1/recommendations");
             url = url.SetQueryParam("seed_artists", artistId);
-            url = url.SetQueryParam("seed_genres", "classical,country");
 
+            if (tempo != null)
+                url = url.SetQueryParam("target_tempo", tempo);
+            if (energy != null)
+                url = url.SetQueryParam("target_energy", energy);
+            if (danceability != null)
+                url = url.SetQueryParam("target_danceability", danceability);
+            if (mode != null)
+                url = url.SetQueryParam("target_mode", mode);
             if (limit != null)
                 url = url.SetQueryParam("limit", limit);
 
